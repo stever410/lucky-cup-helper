@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   ButtonGroup,
@@ -7,71 +7,95 @@ import {
   Row,
   Stack,
 } from "react-bootstrap";
-import Spreadsheet, { Matrix } from "react-spreadsheet";
+import Spreadsheet from "react-spreadsheet";
 import "./App.css";
 import CustomCard from "./components/CustomCard";
+import useMatrix from "./hooks/useMatrix";
 
-const CARD_HEADERS = [
+const STATISTIC_HEADERS: Array<Statistic> = [
   {
+    id: "longestA",
     title: "A dài nhất",
     value: 0,
   },
   {
+    id: "longestB",
     title: "B dài nhất",
     value: 0,
   },
   {
+    id: "longestC",
     title: "C dài nhất",
     value: 0,
   },
   {
+    id: "mostParallel",
     title: "Dây song song",
     value: 0,
   },
   {
+    id: "mostGroup",
     title: "Dây chùm",
     value: 0,
   },
 ];
 
 const App = () => {
-  const DEFAULT_SIZE = 10;
-  const [statistic, setStatistic] = useState(CARD_HEADERS);
-  const [data, setData] = useState<Matrix<Item | undefined>>(
-    [...new Array(DEFAULT_SIZE)].map(() => new Array(DEFAULT_SIZE))
-  );
+  const [statistic, setStatistic] = useState(STATISTIC_HEADERS);
+  const {
+    matrix,
+    handleChange,
+    addColumn,
+    addRow,
+    removeLastColumn,
+    removeLastRow,
+    clearMatrix,
+    getStatistic,
+    saveMatrixToLocalStorage,
+  } = useMatrix();
 
-  const handleDataChanged = (data: Matrix<Item | undefined>) => {
-    console.log(data);
-    setData(data);
-  };
-
-  const calculateLongestColumnWithValue = (
-    data: Matrix<Item | undefined>,
-    value: string
-  ) => {
-    // To be implemented
-    return 1;
-  };
+  useEffect(() => {
+    const latestStatistic = getStatistic();
+    setStatistic(
+      statistic.map((s) => ({ ...s, value: latestStatistic[s.id] }))
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [matrix]);
 
   return (
     <Container>
       <Stack gap={3}>
         <h1 className="text-center">Lucky Cup Helper</h1>
         <ButtonGroup>
-          <Button variant="outline-primary">Add row</Button>
-          <Button variant="outline-primary">Add column</Button>
-          <Button variant="outline-danger">Remove row</Button>
-          <Button variant="outline-danger">Remove column</Button>
+          <Button variant="outline-primary" onClick={addRow}>
+            Add row
+          </Button>
+          <Button variant="outline-primary" onClick={addColumn}>
+            Add column
+          </Button>
+          <Button variant="outline-danger" onClick={removeLastRow}>
+            Remove row
+          </Button>
+          <Button variant="outline-danger" onClick={removeLastColumn}>
+            Remove column
+          </Button>
         </ButtonGroup>
         <Spreadsheet
           className="d-flex justify-content-center"
-          data={data}
-          onChange={handleDataChanged}
+          data={matrix}
+          onChange={handleChange}
         />
+        <ButtonGroup className="">
+          <Button variant="outline-primary" onClick={saveMatrixToLocalStorage}>
+            Save
+          </Button>
+          <Button variant="outline-danger" onClick={clearMatrix}>
+            Clear
+          </Button>
+        </ButtonGroup>
         <Row className="gx-4 gy-4 mx-0">
           {statistic.map(({ title, value }) => (
-            <Col xs={6} lg={4}>
+            <Col key={title} xs={6} lg={4}>
               <CustomCard title={title} body={value.toString()} />
             </Col>
           ))}

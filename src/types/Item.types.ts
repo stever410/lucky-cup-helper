@@ -1,3 +1,3 @@
 type Item = {
-  value: string;
+  value: "A" | "B" | "C";
 };
