@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Button,
   ButtonGroup,
@@ -11,37 +10,9 @@ import Spreadsheet from "react-spreadsheet";
 import "./App.css";
 import CustomCard from "./components/CustomCard";
 import useMatrix from "./hooks/useMatrix";
-
-const STATISTIC_HEADERS: Array<Statistic> = [
-  {
-    id: "longestA",
-    title: "A dài nhất",
-    value: 0,
-  },
-  {
-    id: "longestB",
-    title: "B dài nhất",
-    value: 0,
-  },
-  {
-    id: "longestC",
-    title: "C dài nhất",
-    value: 0,
-  },
-  {
-    id: "mostParallel",
-    title: "Dây song song",
-    value: 0,
-  },
-  {
-    id: "mostGroup",
-    title: "Dây chùm",
-    value: 0,
-  },
-];
+import useStatistic from "./hooks/useStatistic";
 
 const App = () => {
-  const [statistic, setStatistic] = useState(STATISTIC_HEADERS);
   const {
     matrix,
     handleChange,
@@ -50,17 +21,9 @@ const App = () => {
     removeLastColumn,
     removeLastRow,
     clearMatrix,
-    getStatistic,
     saveMatrixToLocalStorage,
   } = useMatrix();
-
-  useEffect(() => {
-    const latestStatistic = getStatistic();
-    setStatistic(
-      statistic.map((s) => ({ ...s, value: latestStatistic[s.id] }))
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [matrix]);
+  const statistic = useStatistic(matrix);
 
   return (
     <Container>
@@ -68,16 +31,16 @@ const App = () => {
         <h1 className="text-center">Lucky Cup Helper</h1>
         <ButtonGroup>
           <Button variant="outline-primary" onClick={addRow}>
-            Add row
+            Thêm dòng
           </Button>
           <Button variant="outline-primary" onClick={addColumn}>
-            Add column
+            Thêm cột
           </Button>
           <Button variant="outline-danger" onClick={removeLastRow}>
-            Remove row
+            Xóa dòng cuối
           </Button>
           <Button variant="outline-danger" onClick={removeLastColumn}>
-            Remove column
+            Xóa cột cuối
           </Button>
         </ButtonGroup>
         <Spreadsheet
@@ -87,10 +50,10 @@ const App = () => {
         />
         <ButtonGroup className="">
           <Button variant="outline-primary" onClick={saveMatrixToLocalStorage}>
-            Save
+            Lưu
           </Button>
           <Button variant="outline-danger" onClick={clearMatrix}>
-            Clear
+            Xóa toàn bộ giá trị
           </Button>
         </ButtonGroup>
         <Row className="gx-4 gy-4 mx-0">

@@ -17,33 +17,6 @@ const useMatrix = () => {
     }
   }, []);
 
-  const getStatistic = () => {
-    return {
-      longestA: getLongestColumnWithValue("A"),
-      longestB: getLongestColumnWithValue("B"),
-      longestC: getLongestColumnWithValue("C"),
-      mostParallel: 0,
-      mostGroup: 0,
-    };
-  };
-
-  const getLongestColumnWithValue = (value: string) => {
-    let maxLength = 0;
-    for (let i = 0; i < matrix.length; i++) {
-      let j = 0;
-      if (matrix[j] && matrix[j][i]?.value === value) {
-        let currentLength = 1;
-        while (j < matrix.length) {
-          ++j;
-          if (matrix[j][i]?.value === value) currentLength++;
-          else break;
-        }
-        if (currentLength > maxLength) maxLength = currentLength;
-      }
-    }
-    return maxLength;
-  };
-
   const addRow = () => {
     setMatrix([...matrix, new Array(matrix.length)]);
   };
@@ -85,7 +58,6 @@ const useMatrix = () => {
     removeLastColumn,
     removeLastRow,
     handleChange,
-    getStatistic,
     clearMatrix,
     saveMatrixToLocalStorage,
   };
