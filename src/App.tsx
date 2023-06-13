@@ -26,8 +26,8 @@ const App = () => {
   const statistic = useStatistic(matrix);
 
   return (
-    <Container>
-      <Stack gap={3}>
+    <Container fluid>
+      <Stack gap={3} className="d-flex justify-content-center">
         <h1 className="text-center">Lucky Cup Helper</h1>
         <ButtonGroup>
           <Button variant="outline-primary" onClick={addRow}>
@@ -44,7 +44,7 @@ const App = () => {
           </Button>
         </ButtonGroup>
         <Spreadsheet
-          className="d-flex justify-content-center"
+          className="spreadsheet-container"
           data={matrix}
           onChange={handleChange}
         />
@@ -58,7 +58,7 @@ const App = () => {
         </ButtonGroup>
         <Row className="gx-4 gy-4 mx-0">
           {statistic.map(({ title, value }) => (
-            <Col key={title} xs={6} lg={4}>
+            <Col key={title} xs={12} sm={6} lg={4}>
               <CustomCard title={title} body={value.toString()} />
             </Col>
           ))}
