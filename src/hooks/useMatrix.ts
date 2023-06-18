@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Matrix } from "react-spreadsheet";
+import { Item } from "../types/Item.types";
 
 const LOCAL_STORAGE_KEY = "matrix";
 const DEFAULT_SIZE = 10;

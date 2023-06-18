@@ -1,11 +1,7 @@
-type Statistic = {
-  id:
-    | "longestA"
-    | "longestB"
-    | "longestC"
-    | "currentColumnSize"
-    | "mostParallel"
-    | "mostGroup";
+import { StatisticType } from "../enums/StatisticType.enums";
+
+export type Statistic = {
+  type: StatisticType;
   title: string;
   value: number;
 };

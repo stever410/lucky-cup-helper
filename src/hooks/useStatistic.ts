@@ -1,35 +1,38 @@
 import { useEffect, useState } from "react";
 import { Matrix } from "react-spreadsheet";
 import { findNonNullIndexFromEndToStart } from "../utils";
+import { Item } from "../types/Item.types";
+import { Statistic } from "../types/Statistic.types";
+import { StatisticType } from "../enums/StatisticType.enums";
 
 const STATISTIC_HEADERS: Array<Statistic> = [
   {
-    id: "longestA",
+    type: StatisticType.LongestA,
     title: "A dài nhất",
     value: 0,
   },
   {
-    id: "longestB",
+    type: StatisticType.LongestB,
     title: "B dài nhất",
     value: 0,
   },
   {
-    id: "longestC",
+    type: StatisticType.LongestC,
     title: "C dài nhất",
     value: 0,
   },
   {
-    id: "currentColumnSize",
+    type: StatisticType.CurrentColumnSize,
     title: "Kéo dây",
     value: 0,
   },
   {
-    id: "mostParallel",
+    type: StatisticType.TotalParallel,
     title: "Dây song song",
     value: 0,
   },
   {
-    id: "mostGroup",
+    type: StatisticType.TotalGroup,
     title: "Dây chùm",
     value: 0,
   },
@@ -40,16 +43,16 @@ const useStatistic = (matrix: Matrix<Item | undefined>) => {
 
   useEffect(() => {
     const result = {
-      longestA: getLongestColumnWithValue("A"),
-      longestB: getLongestColumnWithValue("B"),
-      longestC: getLongestColumnWithValue("C"),
-      currentColumnSize: getLatestColumnSize(),
-      mostParallel: 0,
-      mostGroup: 0,
+      [StatisticType.LongestA]: getLongestColumnWithValue("A"),
+      [StatisticType.LongestB]: getLongestColumnWithValue("B"),
+      [StatisticType.LongestC]: getLongestColumnWithValue("C"),
+      [StatisticType.CurrentColumnSize]: getLatestColumnSize(),
+      [StatisticType.TotalParallel]: 0,
+      [StatisticType.TotalGroup]: 0,
     };
 
     setStatistic(
-      statistic.map((data) => ({ ...data, value: result[data.id] }))
+      statistic.map((data) => ({ ...data, value: result[data.type] }))
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matrix]);

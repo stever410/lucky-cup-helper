@@ -1,3 +1,3 @@
-type Item = {
+export type Item = {
   value: "A" | "B" | "C";
 };

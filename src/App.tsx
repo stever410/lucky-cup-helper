@@ -9,10 +9,14 @@ import {
 import Spreadsheet from "react-spreadsheet";
 import "./App.css";
 import CustomCard from "./components/CustomCard";
+import IconButton from "./components/IconButton";
 import useMatrix from "./hooks/useMatrix";
 import useStatistic from "./hooks/useStatistic";
+import SettingModal from "./components/SettingModal";
+import { useState } from "react";
 
 const App = () => {
+  const [isModalShow, setIsModalShow] = useState(false);
   const {
     matrix,
     handleChange,
@@ -27,8 +31,20 @@ const App = () => {
 
   return (
     <Container fluid>
+      <SettingModal show={isModalShow} onHide={() => setIsModalShow(false)} />
       <Stack gap={3} className="d-flex justify-content-center">
-        <h1 className="text-center">Lucky Cup Helper</h1>
+        <Stack
+          direction="horizontal"
+          gap={3}
+          className="d-flex justify-content-center align-items-center"
+        >
+          <h1 className="text-center">Lucky Cup Helper</h1>
+          <IconButton
+            iconName="GearFill"
+            size={24}
+            onClick={() => setIsModalShow(true)}
+          />
+        </Stack>
         <div className="d-flex justify-content-center">
           <ButtonGroup className="w-75">
             <Button variant="outline-primary" onClick={addRow}>
