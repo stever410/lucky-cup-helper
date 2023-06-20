@@ -29,14 +29,12 @@ const useMatrix = () => {
   };
 
   const removeLastRow = () => {
-    const tempMatrix = [...matrix];
-    tempMatrix.pop();
+    const tempMatrix = [...matrix].slice(0, -1);
     setMatrix(tempMatrix);
   };
 
   const removeLastColumn = () => {
-    const tempMatrix = [...matrix];
-    tempMatrix.forEach((row) => row.pop());
+    const tempMatrix = [...matrix].map((row) => row.slice(0, -1));
     setMatrix(tempMatrix);
   };
 
@@ -49,7 +47,13 @@ const useMatrix = () => {
   };
 
   const handleChange = (data: Matrix<Item | undefined>) => {
-    setMatrix(data);
+    const tmpMatrix = data.map((row) => {
+      return row.map((item) => {
+        if (!item?.value || item?.value.length === 0) item = undefined;
+        return item;
+      });
+    });
+    setMatrix(tmpMatrix);
   };
 
   return {

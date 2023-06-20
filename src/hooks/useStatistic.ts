@@ -47,8 +47,8 @@ const useStatistic = (matrix: Matrix<Item | undefined>) => {
       [StatisticType.LongestB]: getLongestColumnWithValue("B"),
       [StatisticType.LongestC]: getLongestColumnWithValue("C"),
       [StatisticType.CurrentColumnSize]: getLatestColumnSize(),
-      [StatisticType.TotalParallel]: 0,
-      [StatisticType.TotalGroup]: 0,
+      [StatisticType.TotalParallel]: getTotalParallel(),
+      [StatisticType.TotalGroup]: getTotalAdjacentGroupColumns(),
     };
 
     setStatistic(
@@ -87,6 +87,28 @@ const useStatistic = (matrix: Matrix<Item | undefined>) => {
       }
     }
     return latestColumnSize;
+  };
+
+  const getTotalAdjacentGroupColumns = () => {
+    const numRows = 2; // we only need to check the first 2 rows
+    const numCols = matrix[0].length;
+    let count = 0;
+
+    for (let col = 0; col < numCols; col++) {
+      for (let row = 0; row < numRows; row++) {
+        const cellValue = matrix[row][col];
+        const adjacentCellValue = matrix[row][col + 1] || null;
+        if (cellValue && !adjacentCellValue) {
+          if (row === numRows - 1) count++;
+        }
+      }
+    }
+
+    return count;
+  };
+
+  const getTotalParallel = () => {
+    return 0;
   };
 
   return statistic;
