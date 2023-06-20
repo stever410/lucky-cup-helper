@@ -1,7 +1,9 @@
-import { StatisticType } from "../enums/StatisticType.enums";
+import StatisticType from "../enums/StatisticType.enums";
 
-export type Statistic = {
+type Statistic = {
   type: StatisticType;
   title: string;
   value: number;
 };
+
+export default Statistic;

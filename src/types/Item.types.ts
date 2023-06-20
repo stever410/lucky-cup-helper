@@ -1,3 +1,5 @@
-export type Item = {
+type Item = {
   value: "A" | "B" | "C";
 };
+
+export default Item;

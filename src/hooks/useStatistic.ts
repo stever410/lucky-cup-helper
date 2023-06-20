@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Matrix } from "react-spreadsheet";
 import { findNonNullIndexFromEndToStart } from "../utils";
-import { Item } from "../types/Item.types";
-import { Statistic } from "../types/Statistic.types";
-import { StatisticType } from "../enums/StatisticType.enums";
+import Item from "../types/Item.types";
+import Statistic from "../types/Statistic.types";
+import StatisticType from "../enums/StatisticType.enums";
 
 const STATISTIC_HEADERS: Array<Statistic> = [
   {
