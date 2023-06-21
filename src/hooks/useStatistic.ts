@@ -27,8 +27,18 @@ const STATISTIC_HEADERS: Array<Statistic> = [
     value: 0,
   },
   {
-    type: StatisticType.TotalParallel,
-    title: "Dây song song",
+    type: StatisticType.ParallelA,
+    title: "Dây song song A",
+    value: 0,
+  },
+  {
+    type: StatisticType.ParallelB,
+    title: "Dây song song B",
+    value: 0,
+  },
+  {
+    type: StatisticType.ParallelC,
+    title: "Dây song song C",
     value: 0,
   },
   {
@@ -42,12 +52,14 @@ const useStatistic = (matrix: Matrix<Item | undefined>) => {
   const [statistic, setStatistic] = useState(STATISTIC_HEADERS);
 
   useEffect(() => {
-    const result = {
+    const result: Record<string, number> = {
       [StatisticType.LongestA]: getLongestColumnWithValue("A"),
       [StatisticType.LongestB]: getLongestColumnWithValue("B"),
       [StatisticType.LongestC]: getLongestColumnWithValue("C"),
       [StatisticType.CurrentColumnSize]: getLatestColumnSize(),
-      [StatisticType.TotalParallel]: getTotalParallel(),
+      [StatisticType.ParallelA]: getTotalParallelWithValue("A"),
+      [StatisticType.ParallelB]: getTotalParallelWithValue("B"),
+      [StatisticType.ParallelC]: getTotalParallelWithValue("C"),
       [StatisticType.TotalGroup]: getTotalAdjacentGroupColumns(),
     };
 
@@ -107,8 +119,26 @@ const useStatistic = (matrix: Matrix<Item | undefined>) => {
     return count;
   };
 
-  const getTotalParallel = () => {
-    return 0;
+  const getTotalParallelWithValue = (value: string) => {
+    const rows = matrix.length;
+    const cols = matrix[0].length;
+    let count = 0;
+
+    for (let col = 0; col < cols; col++) {
+      let valueCount = 0;
+
+      for (let row = 0; row < rows; row++) {
+        if (matrix[row][col]?.value === value) {
+          valueCount++;
+        }
+      }
+
+      if (valueCount >= 2) {
+        count++;
+      }
+    }
+
+    return count;
   };
 
   return statistic;

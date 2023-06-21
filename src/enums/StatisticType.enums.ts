@@ -3,7 +3,9 @@ enum StatisticType {
   LongestB,
   LongestC,
   CurrentColumnSize,
-  TotalParallel,
+  ParallelA,
+  ParallelB,
+  ParallelC,
   TotalGroup,
 }
 
