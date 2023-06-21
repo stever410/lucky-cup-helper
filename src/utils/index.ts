@@ -92,25 +92,21 @@ const getTotalParallelWithValue = (
 };
 
 const getStatistic = (matrix: Matrix<Item | undefined>) => {
-  const getStatistic = () => {
-    const result: Record<string, number> = {
-      [StatisticType.LongestA]: getLongestColumnWithValue(matrix, "A"),
-      [StatisticType.LongestB]: getLongestColumnWithValue(matrix, "B"),
-      [StatisticType.LongestC]: getLongestColumnWithValue(matrix, "C"),
-      [StatisticType.CurrentColumnSize]: getLatestColumnSize(matrix),
-      [StatisticType.ParallelA]: getTotalParallelWithValue(matrix, "A"),
-      [StatisticType.ParallelB]: getTotalParallelWithValue(matrix, "B"),
-      [StatisticType.ParallelC]: getTotalParallelWithValue(matrix, "C"),
-      [StatisticType.TotalGroup]: getTotalAdjacentGroupColumns(matrix),
-    };
-
-    return STATISTIC_HEADERS.map((data) => ({
-      ...data,
-      value: result[data.type],
-    }));
+  const result: Record<StatisticType, number> = {
+    [StatisticType.LongestA]: getLongestColumnWithValue(matrix, "A"),
+    [StatisticType.LongestB]: getLongestColumnWithValue(matrix, "B"),
+    [StatisticType.LongestC]: getLongestColumnWithValue(matrix, "C"),
+    [StatisticType.CurrentColumnSize]: getLatestColumnSize(matrix),
+    [StatisticType.ParallelA]: getTotalParallelWithValue(matrix, "A"),
+    [StatisticType.ParallelB]: getTotalParallelWithValue(matrix, "B"),
+    [StatisticType.ParallelC]: getTotalParallelWithValue(matrix, "C"),
+    [StatisticType.TotalGroup]: getTotalAdjacentGroupColumns(matrix),
   };
 
-  return getStatistic();
+  return STATISTIC_HEADERS.map((data) => ({
+    ...data,
+    value: result[data.type],
+  }));
 };
 
 const getSettings = () => {

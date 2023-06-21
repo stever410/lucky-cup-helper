@@ -4,6 +4,7 @@ import { INITIAL_VALUE, MATRIX_KEY } from "../constants";
 import Item from "../types/Item.types";
 import { getSettings, getStatistic } from "../utils";
 import useSound from "./useSound";
+import StatisticType from "../enums/StatisticType.enums";
 
 const useMatrix = (initialMatrix: Matrix<Item | undefined>) => {
   const [matrix, setMatrix] = useState<Matrix<Item | undefined>>(initialMatrix);
@@ -13,7 +14,9 @@ const useMatrix = (initialMatrix: Matrix<Item | undefined>) => {
   useEffect(() => {
     const savedMatrix = localStorage.getItem(MATRIX_KEY);
     if (savedMatrix) {
-      setMatrix(JSON.parse(savedMatrix));
+      const tmpMatrix = JSON.parse(savedMatrix);
+      setMatrix(tmpMatrix);
+      setStatistic(getStatistic(tmpMatrix));
     }
   }, []);
 
@@ -54,18 +57,36 @@ const useMatrix = (initialMatrix: Matrix<Item | undefined>) => {
     });
     const tmpStatistic = getStatistic(tmpMatrix);
     const settings = getSettings();
-
-    setStatistic(tmpStatistic);
-    setMatrix(tmpMatrix);
+    const notifyList: Record<StatisticType, boolean> = {
+      [StatisticType.LongestA]: false,
+      [StatisticType.LongestB]: false,
+      [StatisticType.LongestC]: false,
+      [StatisticType.CurrentColumnSize]: false,
+      [StatisticType.ParallelA]: false,
+      [StatisticType.ParallelB]: false,
+      [StatisticType.ParallelC]: false,
+      [StatisticType.TotalGroup]: false,
+    };
 
     if (settings) {
-      const shouldPlaySound = tmpStatistic.some(({ threshold, value }) => {
+      let shouldPlaySound = false;
+      tmpStatistic.forEach(({ type, threshold, value }) => {
         const thresholdValue = settings[threshold];
-        if (value === thresholdValue) return true;
-        return false;
+        if (value === thresholdValue) {
+          notifyList[type] = true;
+          shouldPlaySound = true;
+        }
       });
       if (shouldPlaySound) playSuccessSound();
     }
+
+    setMatrix(tmpMatrix);
+    setStatistic(
+      tmpStatistic.map((data) => ({
+        ...data,
+        isThresholdReach: notifyList[data.type],
+      }))
+    );
   };
 
   return {

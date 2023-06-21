@@ -79,7 +79,7 @@ const App = () => {
                 variant="outline-primary"
                 onClick={saveMatrixToLocalStorage}
               >
-                Lưu
+                Lưu vào trình duyệt
               </Button>
               <Button variant="outline-danger" onClick={clearMatrix}>
                 Xóa toàn bộ
@@ -87,9 +87,13 @@ const App = () => {
             </ButtonGroup>
           </div>
           <Row className="gx-4 gy-4 mx-0">
-            {statistic.map(({ title, value }) => (
+            {statistic.map(({ title, value, isThresholdReach = false }) => (
               <Col key={title} xs={12} sm={6} lg={4} xl={3}>
-                <CustomCard title={title} body={value.toString()} />
+                <CustomCard
+                  title={title}
+                  body={value.toString()}
+                  blink={isThresholdReach}
+                />
               </Col>
             ))}
           </Row>

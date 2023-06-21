@@ -6,6 +6,7 @@ type Statistic = {
   threshold: Threshold;
   title: string;
   value: number;
+  isThresholdReach?: boolean;
 };
 
 export default Statistic;
