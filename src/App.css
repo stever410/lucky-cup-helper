@@ -1,7 +1,7 @@
 .spreadsheet-container {
-  display: flex;
+  display: flex !important;
   margin: auto;
   vertical-align: middle;
-  max-width: 100vw;
-  overflow-x: scroll;
+  max-width: 100%;
+  overflow-x: scroll !important;
 }
