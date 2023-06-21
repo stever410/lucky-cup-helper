@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react";
 import { Matrix } from "react-spreadsheet";
+import { INITIAL_VALUE, MATRIX_KEY } from "../constants";
 import Item from "../types/Item.types";
+import { getSettings, getStatistic } from "../utils";
+import useSound from "./useSound";
 
-const LOCAL_STORAGE_KEY = "matrix";
-const DEFAULT_SIZE = 10;
-const INITIAL_VALUE = [...new Array(DEFAULT_SIZE)].map(
-  () => new Array(DEFAULT_SIZE)
-);
-
-const useMatrix = () => {
-  const [matrix, setMatrix] = useState<Matrix<Item | undefined>>(INITIAL_VALUE);
+const useMatrix = (initialMatrix: Matrix<Item | undefined>) => {
+  const [matrix, setMatrix] = useState<Matrix<Item | undefined>>(initialMatrix);
+  const [statistic, setStatistic] = useState(getStatistic(matrix));
+  const { playSuccessSound } = useSound();
 
   useEffect(() => {
-    const savedMatrix = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const savedMatrix = localStorage.getItem(MATRIX_KEY);
     if (savedMatrix) {
       setMatrix(JSON.parse(savedMatrix));
     }
@@ -43,7 +42,7 @@ const useMatrix = () => {
   };
 
   const saveMatrixToLocalStorage = () => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(matrix));
+    localStorage.setItem(MATRIX_KEY, JSON.stringify(matrix));
   };
 
   const handleChange = (data: Matrix<Item | undefined>) => {
@@ -53,11 +52,25 @@ const useMatrix = () => {
         return item;
       });
     });
+    const tmpStatistic = getStatistic(tmpMatrix);
+    const settings = getSettings();
+
+    setStatistic(tmpStatistic);
     setMatrix(tmpMatrix);
+
+    if (settings) {
+      const shouldPlaySound = tmpStatistic.some(({ threshold, value }) => {
+        const thresholdValue = settings[threshold];
+        if (value === thresholdValue) return true;
+        return false;
+      });
+      if (shouldPlaySound) playSuccessSound();
+    }
   };
 
   return {
     matrix,
+    statistic,
     addRow,
     addColumn,
     removeLastColumn,
