@@ -42,6 +42,7 @@ const useMatrix = (initialMatrix: Matrix<Item | undefined>) => {
 
   const clearMatrix = () => {
     setMatrix(INITIAL_VALUE);
+    setStatistic(getStatistic(INITIAL_VALUE));
   };
 
   const saveMatrixToLocalStorage = () => {

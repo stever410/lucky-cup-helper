@@ -20,7 +20,7 @@ const getLongestColumnWithValue = (
     let columnLength = 0;
 
     for (let row = 0; row < matrix.length; row++) {
-      if (matrix[row][col]?.value === value) {
+      if (matrix[row][col]?.value.toUpperCase() === value.toUpperCase()) {
         columnLength++;
       }
 
@@ -39,7 +39,7 @@ const getLatestColumnSize = (matrix: Matrix<Item | undefined>) => {
   const value = matrix[0][colIdx]?.value;
   let latestColumnSize = 0;
   for (let rowIdx = 0; rowIdx < matrix.length; rowIdx++) {
-    if (matrix[rowIdx][colIdx]?.value === value) {
+    if (matrix[rowIdx][colIdx]?.value.toUpperCase() === value?.toUpperCase()) {
       latestColumnSize++;
     } else {
       break;
@@ -55,8 +55,9 @@ const getTotalAdjacentGroupColumns = (matrix: Matrix<Item | undefined>) => {
 
   for (let col = 0; col < numCols; col++) {
     for (let row = 0; row < numRows; row++) {
-      const cellValue = matrix[row][col];
-      const adjacentCellValue = matrix[row][col + 1] || null;
+      const cellValue = matrix[row][col]?.value.toUpperCase();
+      const adjacentCellValue =
+        matrix[row][col + 1]?.value.toUpperCase() || null;
       if (cellValue && !adjacentCellValue) {
         if (row === numRows - 1) count++;
       }
@@ -78,7 +79,7 @@ const getTotalParallelWithValue = (
     let valueCount = 0;
 
     for (let row = 0; row < rows; row++) {
-      if (matrix[row][col]?.value === value) {
+      if (matrix[row][col]?.value.toUpperCase() === value.toUpperCase()) {
         valueCount++;
       }
     }
